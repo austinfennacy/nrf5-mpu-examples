@@ -35,11 +35,12 @@ void mpu_init(void)
     APP_ERROR_CHECK(ret_code); // Check for errors in return value
     
     // Setup and configure the MPU with intial values
-    app_mpu_config_t p_mpu_config = MPU_DEFAULT_CONFIG(); // Load default values
-    p_mpu_config.smplrt_div = 19;   // Change sampelrate. Sample Rate = Gyroscope Output Rate / (1 + SMPLRT_DIV). 19 gives a sample rate of 50Hz
-    p_mpu_config.accel_config.afs_sel = AFS_2G; // Set accelerometer full scale range to 2G
-    ret_code = app_mpu_config(&p_mpu_config); // Configure the MPU with above values
-    APP_ERROR_CHECK(ret_code); // Check for errors in return value 
+    app_mpu_config_t p_mpu_config = MPU_DEFAULT_CONFIG(); 	// Load default config values
+    p_mpu_config.smplrt_div = 7;   													// Change gyro sample rate. 7 gives a sample rate of 1kHz (see section 4.4, MPU Register Map PDF). 
+    p_mpu_config.accel_config.afs_sel = AFS_2G; 						// Set accelerometer full scale range to ±2g
+    p_mpu_config.gyro_config.fs_sel = GFS_250DPS,						// Set gyroscope full scale range to ±250°/s
+	  ret_code = app_mpu_config(&p_mpu_config); 							// Configure the MPU with above values
+    APP_ERROR_CHECK(ret_code); 															// Check for errors in return value 
 }
 
 /**
@@ -51,7 +52,7 @@ int main(void)
     
     // Initialize.
     log_init();
-	NRF_LOG_INFO("\033[2J\033[;H"); // Clear screen
+	  //NRF_LOG_INFO("\033[2J\033[;H"); // Clear screen
     
     mpu_init();
     
@@ -59,6 +60,7 @@ int main(void)
     NRF_LOG_INFO("MPU Free Fall Interrupt example.");
     
     accel_values_t acc_values;
+	  gyro_values_t gyro_values;
     uint32_t sample_number = 0;
     
     while(1)
@@ -68,8 +70,10 @@ int main(void)
             // Read accelerometer sensor values
             err_code = app_mpu_read_accel(&acc_values);
             APP_ERROR_CHECK(err_code);
+					  err_code = app_mpu_read_gyro(&gyro_values);
+						APP_ERROR_CHECK(err_code);
             // Clear terminal and print values
-            NRF_LOG_INFO("\033[3;1HSample # %d\r\nX: %06d\r\nY: %06d\r\nZ: %06d", ++sample_number, acc_values.x, acc_values.y, acc_values.z);
+            NRF_LOG_INFO("%06d,%06d,%06d,%06d,%06d,%06d", acc_values.x, acc_values.y, acc_values.z, gyro_values.x, gyro_values.y, gyro_values.z);
             nrf_delay_ms(250);
         }
     }

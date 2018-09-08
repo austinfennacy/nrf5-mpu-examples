@@ -47,8 +47,8 @@ uint32_t app_mpu_init(void)
 {
     uint32_t err_code;
 	
-	// Initate TWI or SPI driver dependent on what is defined from the project
-	err_code = nrf_drv_mpu_init();
+	  // Initate TWI or SPI driver dependent on what is defined from the project
+	  err_code = nrf_drv_mpu_init();
     if(err_code != NRF_SUCCESS) return err_code;
 
     uint8_t reset_value = 7; // Resets gyro, accelerometer and temperature sensor signal paths.
