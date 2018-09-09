@@ -62,6 +62,15 @@ int main(void)
     accel_values_t acc_values;
 	  gyro_values_t gyro_values;
     uint32_t sample_number = 0;
+	
+		double ax_gscale;
+		double ay_gscale;
+		double az_gscale;
+		double gx_degscale;
+		double gy_degscale;
+		double gz_degscale;
+		double acc_LSB = (double) 65535/(2*2);     		//Set accel to ±2g (see section 4.5, MPU Register Map PDF)
+	  double gyro_LSB = (double) 65535/(250*2); 		//Set gyro to ±250°/s (see section 4.4, MPU Register Map PDF)
     
     while(1)
     {
@@ -72,9 +81,23 @@ int main(void)
             APP_ERROR_CHECK(err_code);
 					  err_code = app_mpu_read_gyro(&gyro_values);
 						APP_ERROR_CHECK(err_code);
+					 					
+						//convert from int16_t to units of g / deg based on LSB
+					  ax_gscale = (double) acc_values.x / acc_LSB;
+						ay_gscale = (double) acc_values.y / acc_LSB;
+						az_gscale = (double) acc_values.z / acc_LSB;
+						gx_degscale = (double) gyro_values.x / gyro_LSB;
+						gy_degscale = (double) gyro_values.y / gyro_LSB;
+						gz_degscale = (double) gyro_values.z / gyro_LSB;
+					
             // Clear terminal and print values
-            NRF_LOG_INFO("%06d,%06d,%06d,%06d,%06d,%06d", acc_values.x, acc_values.y, acc_values.z, gyro_values.x, gyro_values.y, gyro_values.z);
-            nrf_delay_ms(250);
+					  NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale));
+					  NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(az_gscale), NRF_LOG_FLOAT(gx_degscale));
+					  NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER ";", NRF_LOG_FLOAT(gy_degscale), NRF_LOG_FLOAT(gz_degscale));
+					  //NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale), NRF_LOG_FLOAT(az_gscale));
+            //NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER,
+					  //NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale), NRF_LOG_FLOAT(az_gscale), NRF_LOG_FLOAT(gx_degscale), NRF_LOG_FLOAT(gy_degscale), NRF_LOG_FLOAT(gz_degscale));
+            nrf_delay_ms(500);
         }
     }
 }
