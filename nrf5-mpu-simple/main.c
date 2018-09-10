@@ -91,9 +91,9 @@ int main(void)
 						gz_degscale = (double) gyro_values.z / gyro_LSB;
 					
             // Clear terminal and print values
-					  NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale));
-					  NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT(az_gscale), NRF_LOG_FLOAT(gx_degscale));
-					  NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER ";", NRF_LOG_FLOAT(gy_degscale), NRF_LOG_FLOAT(gz_degscale));
+					  NRF_LOG_RAW_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER ",", NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale));
+					  NRF_LOG_RAW_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER ",", NRF_LOG_FLOAT(az_gscale), NRF_LOG_FLOAT(gx_degscale));
+					  NRF_LOG_RAW_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "\r\n", NRF_LOG_FLOAT(gy_degscale), NRF_LOG_FLOAT(gz_degscale));
 					  //NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale), NRF_LOG_FLOAT(az_gscale));
             //NRF_LOG_INFO(NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER "," NRF_LOG_FLOAT_MARKER,
 					  //NRF_LOG_FLOAT(ax_gscale), NRF_LOG_FLOAT(ay_gscale), NRF_LOG_FLOAT(az_gscale), NRF_LOG_FLOAT(gx_degscale), NRF_LOG_FLOAT(gy_degscale), NRF_LOG_FLOAT(gz_degscale));
